@@ -1,10 +1,9 @@
-﻿
-using lab4.Data;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 /*student name- Abhi Patel;
  * 
@@ -20,17 +19,11 @@ Lab Instructor - Aamir Rad
 
 */
 
-namespace Lab4.Controllers
+namespace lab4.Models.ViewModels
 {
-    public class HomeController : Controller
+    public class AdsViewModel
     {
-      
-       
-        public IActionResult Index()
-        {
-            return View();
-        }
-       
-
+        public Community Community { get; set; }
+        public IEnumerable<Advertisement> Advertisements { get; set; }
     }
 }

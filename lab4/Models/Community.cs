@@ -1,17 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
+/*student name- Abhi Patel;
+ * 
+ * Student No:040978822;
+ * 
+ partner Name -Meet Patel;
+
+Student no: 040979409
+
+Assignment 1
+
+Lab Instructor - Aamir Rad 
+
+*/
 namespace lab4.Models
 {
     public class Community
     {
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Display(Name = "Registration Number")]
+        [Display(Name = "Membership")]
         public string ID { get; set; }
 
         [Required]
@@ -22,8 +35,7 @@ namespace lab4.Models
         [Column(TypeName = "money")]
         public decimal Budget { get; set; }
 
-        public ICollection<CommunityMembership> CommunityMemberships 
-        { get; set; }
-
+        public ICollection<CommunityMembership> CommunityMemberships { get; set; }
+        public ICollection<Advertisement> Advertisements { get; set; }
     }
 }

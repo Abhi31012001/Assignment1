@@ -10,7 +10,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+/*student name- Abhi Patel;
+ * 
+ * Student No:040978822;
+ * 
+ partner Name -Meet Patel;
 
+Student no: 040979409
+
+Assignment 1
+
+Lab Instructor - Aamir Rad 
+
+*/
 namespace lab4
 {
     public class Startup
@@ -21,8 +33,7 @@ namespace lab4
             Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("DefaultConnection");
@@ -32,7 +43,7 @@ namespace lab4
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+       
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -43,7 +54,7 @@ namespace lab4
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            // app.UseDeveloperExceptionPage();
+   
             app.UseStaticFiles();
             app.UseRouting();
 

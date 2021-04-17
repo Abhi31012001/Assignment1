@@ -7,22 +7,50 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using lab4.Data;
 using lab4.Models;
+using lab4.Models.ViewModels;
 
-namespace lab4.Controllers
+/*student name- Abhi Patel;
+ * 
+ * Student No:040978822;
+ * 
+ partner Name -Meet Patel;
+
+Student no: 040979409
+
+Assignment 1
+
+Lab Instructor - Aamir Rad 
+
+*/
+namespace Assignment1.Controllers
 {
     public class StudentsController : Controller
     {
         private readonly SchoolCommunityContext _context;
 
-       
-      
-        public IActionResult Create()
+        public StudentsController(SchoolCommunityContext context)
         {
-            return View();
+            _context = context;
         }
+        public async Task<IActionResult> Index(int ID)
+        {
+            CommunityViewModel studentViewModel = new CommunityViewModel();
 
-      
-       
+            studentViewModel.Students = await _context.Students
+                .Include(i => i.CommunityMemberships)
+                .ThenInclude(i => i.Community)
+                .AsNoTracking()
+                .ToListAsync()
+            ;
+
+            if (ID != 0)
+            {
+                ViewData["StudentID"] = ID;
+                studentViewModel.CommunityMemberships = studentViewModel.Students.Where(i => i.ID == ID).Single().CommunityMemberships;
+            }
+
+            return View(studentViewModel);
+        }
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,6 +67,10 @@ namespace lab4.Controllers
 
             return View(student);
         }
+        public IActionResult Create()
+        {
+            return View();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,LastName,FirstName,EnrollmentDate")] Student student)
@@ -50,16 +82,6 @@ namespace lab4.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(student);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var student = await _context.Students.FindAsync(id);
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Edit(int? id)
         {
@@ -75,7 +97,6 @@ namespace lab4.Controllers
             }
             return View(student);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,LastName,FirstName,EnrollmentDate")] Student student)
@@ -107,24 +128,6 @@ namespace lab4.Controllers
             }
             return View(student);
         }
-
-        private bool StudentExists(int id)
-        {
-            return _context.Students.Any(e => e.ID == id);
-        }
-
-        public StudentsController(SchoolCommunityContext context)
-        {
-            _context = context;
-        }
-
-
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Students.ToListAsync());
-        }
-
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,9 +144,58 @@ namespace lab4.Controllers
 
             return View(student);
         }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var student = await _context.Students.FindAsync(id);
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-      
+        private bool StudentExists(int id)
+        {
+            return _context.Students.Any(e => e.ID == id);
+        }
+        public async Task<IActionResult> EditMemberships(int id)
+        {
+            CommunityViewModel communityViewModel = new CommunityViewModel();
 
-       
+            communityViewModel.CommunityMemberships = await _context.CommunityMemberships.Where(i => i.StudentID == id).ToListAsync();
+            communityViewModel.Students = await _context.Students.Where(i => i.ID == id).ToListAsync();
+            communityViewModel.Communities = await _context.Communities.ToListAsync();
+
+            return View(communityViewModel);
+        }
+
+        public async Task<IActionResult> AddMemberships(int studentId, string communityId)
+        {
+            CommunityMembership addMember = new CommunityMembership();
+
+            addMember.CommunityID = communityId;
+            addMember.StudentID = studentId;
+            _context.CommunityMemberships.Add(addMember);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("EditMemberships", new { id = studentId });
+        }
+
+        public async Task<IActionResult> RemoveMemberships(int studentId, string communityId)
+        {
+            CommunityMembership removeMember = new CommunityMembership();
+
+            removeMember.CommunityID = communityId;
+            removeMember.StudentID = studentId;
+            _context.CommunityMemberships.Remove(removeMember);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("EditMemberships", new { id = studentId });
+
+        }
+
+
     }
 }

@@ -1,0 +1,70 @@
+﻿@model lab4.Models.ViewModels.CommunityViewModel
+
+@{ ViewData["Title"] = "EditMemberships"; }
+<style>
+
+
+
+</style>
+<h1>Edit</h1>
+
+<h4>Student</h4>
+<hr />
+
+
+<form asp-action="EditMemberships">
+
+
+    <table class="row">
+
+        <tr>
+            <th>
+                Full Name &nbsp;
+            </th>
+            <td>
+                @Model.Students.First().FullName
+            </td>
+
+        </tr>
+
+    </table>
+
+    <hr />
+
+    <table class="row">
+
+        @foreach (var item in Model.Communities)
+        {
+
+            bool addCom = Model.CommunityMemberships.Where(i => i.CommunityID == item.ID).Count() > 0;
+
+            if (!addCom)
+            {
+<tr>
+    <td>@item.Title </td>
+    <td> <a asp-action="AddMemberships" asp-route-studentId="@Model.Students.First().ID" asp-route-communityId="@item.ID">&nbsp;Register</a></td>
+</tr> }
+
+                else
+                {
+<tr>
+    <td>
+        @item.Title
+    </td>
+    <td>
+        <a asp-action="RemoveMemberships" asp-route-studentId="@Model.Students.First().ID" asp-route-communityId="@item.ID">&nbsp;Unregister</a>
+    </td>
+</tr>}
+
+            }
+
+    </table>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

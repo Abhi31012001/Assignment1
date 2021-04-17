@@ -8,7 +8,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+/*student name- Abhi Patel;
+ * 
+ * Student No:040978822;
+ * 
+ partner Name -Meet Patel;
 
+Student no: 040979409
+
+Assignment 1
+
+Lab Instructor - Aamir Rad 
+
+*/
 namespace lab4
 {
     public class Program

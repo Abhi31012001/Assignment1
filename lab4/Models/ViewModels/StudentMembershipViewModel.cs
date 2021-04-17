@@ -1,10 +1,10 @@
 ﻿
-using lab4.Data;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 /*student name- Abhi Patel;
  * 
@@ -19,18 +19,10 @@ Assignment 1
 Lab Instructor - Aamir Rad 
 
 */
-
-namespace Lab4.Controllers
-{
-    public class HomeController : Controller
+namespace lab4.Models.ViewModels
+{ public class StudentMembershipViewModel 
     {
-      
-       
-        public IActionResult Index()
-        {
-            return View();
-        }
-       
-
+        public Student Student { get; set; }
+        public IEnumerable<StudentViewModel> Memberships { get; set; }
     }
 }
